@@ -4,7 +4,9 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float rotationSpeed = 100f;
+    
+    // Скорость мыши
+    public float mouseSensitivity = 150f; 
 
     private Renderer objRenderer;
     private Rigidbody rb;
@@ -13,29 +15,42 @@ public class Movement : MonoBehaviour
     {
         objRenderer = GetComponentInChildren<Renderer>();
         rb = GetComponent<Rigidbody>();
+        
+        // Скрыть курсор мыши
+        Cursor.lockState = CursorLockMode.Locked; 
     }
 
     void FixedUpdate() 
     {
-        // Движение
-        float moveInput = Input.GetAxis("Vertical");
+        // Движение (W / S) 
+        float moveInput = Input.GetAxis("Vertical"); 
         Vector3 movement = transform.forward * moveInput * moveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + movement);
 
-        // Вращение
-        float rotateInput = Input.GetAxis("Horizontal");
-        float rotationAmount = rotateInput * rotationSpeed * Time.fixedDeltaTime;
+        // Вращение (Мышь)
+        float mouseX = Input.GetAxis("Mouse X");
+        
+        // Умножаем сдвиг мыши на чувствительность
+        float rotationAmount = mouseX * mouseSensitivity * Time.fixedDeltaTime;
+        
+        // Вращаем туловище
         Quaternion turnRotation = Quaternion.Euler(0f, rotationAmount, 0f);
         rb.MoveRotation(rb.rotation * turnRotation);
     }
 
     void Update()
     {
-        // Цвет
+        // Смена цвета 
         if (Input.GetKeyDown(KeyCode.C))
         {
             ChangeColor();
         }
+        
+        // Освободить курсор по нажатию Escape
+        // if (Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //    Cursor.lockState = CursorLockMode.None;
+        // }
     }
 
     void ChangeColor()
