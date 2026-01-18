@@ -1,31 +1,38 @@
 using UnityEngine;
-using UnityEngine.AI; // Библиотека с AI
+using UnityEngine.AI;
 
 public class ClickToMove : MonoBehaviour
 {
-    private NavMeshAgent agent; 
-    private Camera cam;
+    private NavMeshAgent agent;
+    private Animator anim; 
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        cam = Camera.main; 
+        anim = GetComponentInChildren<Animator>(); 
     }
 
     void Update()
     {
-        // Если нажали ЛЕВУЮ кнопку мыши
+        // Логика клика
         if (Input.GetMouseButtonDown(0)) 
         {
-            // Пускаем луч из камеры в точку клика
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            // Если луч попал во что-то (в пол)
             if (Physics.Raycast(ray, out hit))
             {
                 agent.SetDestination(hit.point);
             }
+        }
+
+        // Логика анимации
+        if (anim != null)
+        {
+            // Скорость движения
+            // Если скорость больше 0.1, значит мы движемся
+            bool isMoving = agent.velocity.magnitude > 0.1f;
+            anim.SetBool("IsRunning", isMoving);
         }
     }
 }
