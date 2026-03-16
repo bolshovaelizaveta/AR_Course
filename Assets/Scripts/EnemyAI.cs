@@ -4,34 +4,45 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public Transform player;
+    public float damageAmount = 20f; 
+    public float damageCooldown = 1.0f; 
+    private float lastDamageTime; 
+
     private NavMeshAgent agent;
-    private Animator anim; 
+    private Animator anim;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponentInChildren<Animator>(); 
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()
     {
-        if (player != null)
-        {
-            agent.SetDestination(player.position);
-        }
+        if (player != null) agent.SetDestination(player.position);
 
-        // Анимация
         if (anim != null)
         {
-            float speed = agent.velocity.magnitude;
-                if (speed > 0.1f) 
+            anim.SetBool("IsRunning", agent.velocity.magnitude > 0.1f);
+        }
+    }
+
+    // Когда враг касается игрока
+    void OnTriggerStay(Collider other) 
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (Time.time > lastDamageTime + damageCooldown)
+            {
+                Health playerHealth = other.GetComponent<Health>();
+                
+                if (playerHealth != null)
                 {
-                    anim.SetBool("IsRunning", true);
+                    playerHealth.TakeDamage(damageAmount);
+                    lastDamageTime = Time.time; 
+                    Debug.Log("Враг укусил игрока!");
                 }
-                else if (speed < 0.05f) 
-                {
-                     anim.SetBool("IsRunning", false);
-                }
+            }
         }
     }
 }
