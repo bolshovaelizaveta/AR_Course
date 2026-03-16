@@ -5,49 +5,64 @@ public class ClickToMove : MonoBehaviour
 {
     private NavMeshAgent agent;
     private Animator anim;
+    private Camera mainCam;
 
-    [Header("AR Settings")]
-    public LayerMask groundLayer; 
+    [Header("Настройки движения")]
+    public float keyboardSpeed = 5f;
+    public LayerMask groundLayer;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
+        mainCam = Camera.main;
     }
 
     void Update()
     {
+        HandleKeyboard();
+        HandleMouse();
+        UpdateAnimations();
+    }
+
+    void HandleKeyboard()
+    {
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        if (Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f)
+        {
+            Vector3 moveDir = new Vector3(h, 0, v);
+            agent.Move(moveDir * keyboardSpeed * Time.deltaTime);
+            if (moveDir != Vector3.zero) 
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDir), 0.15f);
+        }
+    }
+
+    void HandleMouse()
+    {
         if (Input.GetMouseButtonDown(0))
         {
-            if (Camera.main != null)
+            Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000f, groundLayer))
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, 1000f, groundLayer))
-                {
-                    Debug.Log("Клик по острову. Точка: " + hit.point);
-                    
-                    if (agent != null)
-                    {
-                        if (!agent.isOnNavMesh)
-                        {
-                            NavMeshHit navHit;
-                            if (NavMesh.SamplePosition(transform.position, out navHit, 5.0f, NavMesh.AllAreas))
-                            {
-                                agent.Warp(navHit.position);
-                            }
-                        }
-
-                        agent.SetDestination(hit.point);
-                    }
-                }
+                agent.SetDestination(hit.point);
             }
         }
+    }
 
-        if (anim != null && agent != null && agent.isActiveAndEnabled)
+    public void MoveToARPoint(Vector3 worldPos)
+    {
+        if (agent != null && agent.isOnNavMesh)
         {
-            bool isMoving = agent.velocity.magnitude > 0.1f;
+            agent.SetDestination(worldPos);
+        }
+    }
+
+    void UpdateAnimations()
+    {
+        if (anim != null)
+        {
+            bool isMoving = agent.velocity.magnitude > 0.1f || Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f;
             anim.SetBool("IsRunning", isMoving);
         }
     }
