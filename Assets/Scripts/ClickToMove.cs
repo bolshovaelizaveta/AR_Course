@@ -4,33 +4,49 @@ using UnityEngine.AI;
 public class ClickToMove : MonoBehaviour
 {
     private NavMeshAgent agent;
-    private Animator anim; 
+    private Animator anim;
+
+    [Header("AR Settings")]
+    public LayerMask groundLayer; 
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponentInChildren<Animator>(); 
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()
     {
-        // Логика клика
-        if (Input.GetMouseButtonDown(0)) 
+        if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
+            if (Camera.main != null)
             {
-                agent.SetDestination(hit.point);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 1000f, groundLayer))
+                {
+                    Debug.Log("Клик по острову. Точка: " + hit.point);
+                    
+                    if (agent != null)
+                    {
+                        if (!agent.isOnNavMesh)
+                        {
+                            NavMeshHit navHit;
+                            if (NavMesh.SamplePosition(transform.position, out navHit, 5.0f, NavMesh.AllAreas))
+                            {
+                                agent.Warp(navHit.position);
+                            }
+                        }
+
+                        agent.SetDestination(hit.point);
+                    }
+                }
             }
         }
 
-        // Логика анимации
-        if (anim != null)
+        if (anim != null && agent != null && agent.isActiveAndEnabled)
         {
-            // Скорость движения
-            // Если скорость больше 0.1, значит мы движемся
             bool isMoving = agent.velocity.magnitude > 0.1f;
             anim.SetBool("IsRunning", isMoving);
         }
