@@ -31,15 +31,15 @@
 
 | Интеграция в реальную комнату (Gaussian Splatting) | Игровой процесс в AR |
 |---|---|
-| ![Room Integration](Media/Screenshots/room G.png) | ![Gameplay](Media/Screenshots/play in room.png) |
+| ![Room Integration](Media/Screenshots/room%20G.png) | ![Gameplay](Media/Screenshots/play%20in%20room.png) |
 
 | Навигация персонажей | Система частиц и бонусы |
 |---|---|
-| ![NavMesh](Media/Screenshots/final/Бегает от npc.png) | ![Particles](Media/Screenshots/final/Собирает рыбки .png) |
+| ![NavMesh](Media/Screenshots/final/Бегает%20от%20npc.png) | ![Particles](Media/Screenshots/final/Собирает%20рыбки.png) |
 
 | Меню GameOver | Меню паузы |
 |---|---|
-| ![GameOver](Media/Screenshots/final/Текущий результат .png) | ![Pause](Media/Screenshots/final/Пауза.png) |
+| ![GameOver](Media/Screenshots/final/Текущий%20результат.png) | ![Pause](Media/Screenshots/final/Пауза.png) |
 
 ## Академический контекст
 Проект выполнен студенткой магистратуры в рамках изучения технологий компьютерного зрения и методов их применения в разработке ПО с дополненной реальностью.
