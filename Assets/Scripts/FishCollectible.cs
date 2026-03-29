@@ -22,11 +22,14 @@ public class FishCollectible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Рыбка съедена!");
-
+            if (ScoreManager.instance != null) {
+                ScoreManager.instance.AddPoint();
+            }
+            if (ScoreManager.instance != null)
             StartCoroutine(CollectSequence());
         }
     }
+    
 
     IEnumerator CollectSequence()
     {
