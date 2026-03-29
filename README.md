@@ -31,15 +31,15 @@
 
 | Интеграция в реальную комнату (Gaussian Splatting) | Игровой процесс в AR |
 |:---:|:---:|
-| <img src="Media/Screenshots/room%20G.png" width="400"> | <img src="Media/Screenshots/play%20in%20room.png" width="400"> |
+| <img src="Media/Screenshots/RoomG.png" width="400"> | <img src="Media/Screenshots/PlayRoom.png" width="400"> |
 
 | Навигация персонажей | Игровой процесс в Gaussian Room |
 |:---:|:---:|
-| <img src="Media/Screenshots/final/Бегает%20от%20npc.png" width="400"> | <img src="Media/Screenshots/Run in room.png" width="400"> |
+| <img src="Media/Screenshots/RunNPC.png" width="400"> | <img src="Media/Screenshots/RunRoom.png" width="400"> |
 
 | Меню GameOver | Меню паузы |
 |:---:|:---:|
-| <img src="Media/Screenshots/final/Рекорд.png" width="400"> | <img src="Media/Screenshots/final/Пауза.png" width="400"> |
+| <img src="Media/Screenshots/PlayAgain.png" width="400"> | <img src="Media/Screenshots/Pause.png" width="400"> |
 
 ## Академический контекст
 Проект выполнен студенткой магистратуры в рамках изучения технологий компьютерного зрения и методов их применения в разработке ПО с дополненной реальностью.
